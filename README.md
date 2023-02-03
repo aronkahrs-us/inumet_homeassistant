@@ -1,7 +1,7 @@
 # INUMET Home Assistant
 
 ### Steps
-1) Paste the rest.yaml in your config folder
+1) Paste the _rest.yaml_ in your config folder
 2) At the top of your _configuration.yaml_ paste ```rest: !include rest.yaml```
 3) Add the Template Weather Provider, in your _configuration.yaml_ paste 
 ```
