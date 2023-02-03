@@ -1,0 +1,268 @@
+- resource: https://www.inumet.gub.uy/reportes/riesgo/advGral.mch
+  headers:
+    Content-Type: 'application/json'  
+  scan_interval: 1800
+  sensor:
+    - name: "Inumet-Alertas"
+      json_attributes_path: "$['advertencias'][0:10]"
+      json_attributes:
+        - riesgoFenomeno
+        - zonasArray
+        - zonasArray['id']
+        - zonasArray.id
+      value_template: >
+            {% set alertas = value_json['advertencias'] %}
+            {% set is_alerta = 'off' %}
+              {% for alerta in alertas %}
+                {% for zona in alerta['zonasArray'] %}
+                  {% if zona['id'] == 'MONTEVIDEO' %}
+                  {% set is_alerta = 'on' %}
+                  {% endif %}
+                {% endfor %}
+              {% endfor %}
+            {{is_alerta}}
+- resource: https://www.inumet.gub.uy/reportes/pronosticos/pronosticoV4.json
+  headers:
+    Content-Type: 'application/json'
+  scan_interval: 1800
+  sensor:
+    - name: Inumet-Pronostico 0d
+      json_attributes_path: "$['items'][5]"
+      json_attributes:
+        - tempMin
+        - tempMax
+        - probLluvia
+        - subgrupos
+        - zonaCorta
+        - estadoTiempo
+      value_template: >
+              {% set estado = value_json['items'][5]['estadoTiempo']|int%}
+              {% if estado == 4 or estado == 13 or estado == 24%}
+              cloudy
+              {% elif estado == 12 or estado == 19 %}
+              windy
+              {% elif estado == 9 or estado == 2 or estado == 21 or estado == 22 %}
+              partlycloudy
+              {% elif estado == 1 %}
+              sunny
+              {% elif estado == 20 %}
+              clear-night
+              {% elif estado == 10 %}
+              lightning
+              {% elif estado == 11 %}
+              lightning-rainy
+              {% elif estado == 23 or estado == 3 or estado == 5 or estado == 6 or estado == 7 %}
+              rainy
+              {% elif estado == 16 or estado == 14 or estado == 15 or estado == 8 %}
+              fog
+              {% elif estado == 17 %}
+              snowy
+              {% elif estado == 18 %}
+              exceptional
+              {% endif %}
+
+    - name: Inumet-Pronostico 1d
+      json_attributes_path: "$['items'][12]"
+      json_attributes:
+        - tempMin
+        - tempMax
+        - probLluvia
+        - subgrupos
+        - zonaCorta
+        - estadoTiempo
+      value_template: >
+              {% set estado = value_json['items'][12]['estadoTiempo']|int%}
+              {% if estado == 4 or estado == 13 or estado == 24%}
+              cloudy
+              {% elif estado == 12 or estado == 19 %}
+              windy
+              {% elif estado == 9 or estado == 2 or estado == 21 or estado == 22 %}
+              partlycloudy
+              {% elif estado == 1 %}
+              sunny
+              {% elif estado == 20 %}
+              clear-night
+              {% elif estado == 10 %}
+              lightning
+              {% elif estado == 11 %}
+              lightning-rainy
+              {% elif estado == 23 or estado == 3 or estado == 5 or estado == 6 or estado == 7 %}
+              rainy
+              {% elif estado == 16 or estado == 14 or estado == 15 or estado == 8 %}
+              fog
+              {% elif estado == 17 %}
+              snowy
+              {% elif estado == 18 %}
+              exceptional
+              {% endif %}
+
+    - name: Inumet-Pronostico 2d
+      json_attributes_path: "$['items'][19]"
+      json_attributes:
+        - tempMin
+        - tempMax
+        - probLluvia
+        - subgrupos
+        - zonaCorta
+        - estadoTiempo
+      value_template: >
+              {% set estado = value_json['items'][19]['estadoTiempo']|int%}
+              {% if estado == 4 or estado == 13 or estado == 24%}
+              cloudy
+              {% elif estado == 12 or estado == 19 %}
+              windy
+              {% elif estado == 9 or estado == 2 or estado == 21 or estado == 22 %}
+              partlycloudy
+              {% elif estado == 1 %}
+              sunny
+              {% elif estado == 20 %}
+              clear-night
+              {% elif estado == 10 %}
+              lightning
+              {% elif estado == 11 %}
+              lightning-rainy
+              {% elif estado == 23 or estado == 3 or estado == 5 or estado == 6 or estado == 7 %}
+              rainy
+              {% elif estado == 16 or estado == 14 or estado == 15 or estado == 8 %}
+              fog
+              {% elif estado == 17 %}
+              snowy
+              {% elif estado == 18 %}
+              exceptional
+              {% endif %}
+
+    - name: Inumet-Pronostico 3d
+      json_attributes_path: "$['items'][26]"
+      json_attributes:
+        - tempMin
+        - tempMax
+        - probLluvia
+        - zonaCorta
+        - estadoTiempo
+      value_template: >
+              {% set estado = value_json['items'][26]['estadoTiempo']|int%}
+              {% if estado == 4 or estado == 13 or estado == 24%}
+              cloudy
+              {% elif estado == 12 or estado == 19 %}
+              windy
+              {% elif estado == 9 or estado == 2 or estado == 21 or estado == 22 %}
+              partlycloudy
+              {% elif estado == 1 %}
+              sunny
+              {% elif estado == 20 %}
+              clear-night
+              {% elif estado == 10 %}
+              lightning
+              {% elif estado == 11 %}
+              lightning-rainy
+              {% elif estado == 23 or estado == 3 or estado == 5 or estado == 6 or estado == 7 %}
+              rainy
+              {% elif estado == 16 or estado == 14 or estado == 15 or estado == 8 %}
+              fog
+              {% elif estado == 17 %}
+              snowy
+              {% elif estado == 18 %}
+              exceptional
+              {% endif %}
+
+    - name: Inumet-Pronostico 4d
+      json_attributes_path: "$['items'][33]"
+      json_attributes:
+        - tempMin
+        - tempMax
+        - probLluvia
+        - zonaCorta
+        - estadoTiempo
+      value_template: >
+              {% set estado = value_json['items'][33]['estadoTiempo']|int%}
+              {% if estado == 4 or estado == 13 or estado == 24%}
+              cloudy
+              {% elif estado == 12 or estado == 19 %}
+              windy
+              {% elif estado == 9 or estado == 2 or estado == 21 or estado == 22 %}
+              partlycloudy
+              {% elif estado == 1 %}
+              sunny
+              {% elif estado == 20 %}
+              clear-night
+              {% elif estado == 10 %}
+              lightning
+              {% elif estado == 11 %}
+              lightning-rainy
+              {% elif estado == 23 or estado == 3 or estado == 5 or estado == 6 or estado == 7 %}
+              rainy
+              {% elif estado == 16 or estado == 14 or estado == 15 or estado == 8 %}
+              fog
+              {% elif estado == 17 %}
+              snowy
+              {% elif estado == 18 %}
+              exceptional
+              {% endif %}
+
+    - name: Inumet-Pronostico 5d
+      json_attributes_path: "$['items'][40]"
+      json_attributes:
+        - tempMin
+        - tempMax
+        - probLluvia
+        - zonaCorta
+        - estadoTiempo
+      value_template: >
+              {% set estado = value_json['items'][40]['estadoTiempo']%}
+              {% if estado == 4 or estado == 13 or estado == 24%}
+              cloudy
+              {% elif estado == 12 or estado == 19 %}
+              windy
+              {% elif estado == 9 or estado == 2 or estado == 21 or estado == 22 %}
+              partlycloudy
+              {% elif estado == 1 %}
+              sunny
+              {% elif estado == 20 %}
+              clear-night
+              {% elif estado == 10 %}
+              lightning
+              {% elif estado == 11 %}
+              lightning-rainy
+              {% elif estado == 23 or estado == 3 or estado == 5 or estado == 6 or estado == 7 %}
+              rainy
+              {% elif estado == 16 or estado == 14 or estado == 15 or estado == 8 %}
+              fog
+              {% elif estado == 17 %}
+              snowy
+              {% elif estado == 18 %}
+              exceptional
+              {% endif %}
+
+    - name: Inumet-Pronostico 6d
+      json_attributes_path: "$['items'][47]"
+      json_attributes:
+        - tempMin
+        - tempMax
+        - probLluvia
+        - zonaCorta
+        - estadoTiempo
+      value_template: >
+              {% set estado = value_json['items'][47]['estadoTiempo']|int%}
+              {% if estado == 4 or estado == 13 or estado == 24 %}
+              cloudy
+              {% elif estado == 12 or estado == 19 %}
+              windy
+              {% elif estado == 9 or estado == 2 or estado == 21 or estado == 22 %}
+              partlycloudy
+              {% elif estado == 1 %}
+              sunny
+              {% elif estado == 20 %}
+              clear-night
+              {% elif estado == 10 %}
+              lightning
+              {% elif estado == 11 %}
+              lightning-rainy
+              {% elif estado == 23 or estado == 3 or estado == 5 or estado == 6 or estado == 7 %}
+              rainy
+              {% elif estado == 16 or estado == 14 or estado == 15 or estado == 8 %}
+              fog
+              {% elif estado == 17 %}
+              snowy
+              {% elif estado == 18 %}
+              exceptional
+              {% endif %}
